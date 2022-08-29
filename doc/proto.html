@@ -187,6 +187,14 @@
                 </li>
               
                 <li>
+                  <a href="#word.GetWordRequest"><span class="badge">M</span>GetWordRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#word.GetWordResponse"><span class="badge">M</span>GetWordResponse</a>
+                </li>
+              
+                <li>
                   <a href="#word.ListWordRequest"><span class="badge">M</span>ListWordRequest</a>
                 </li>
               
@@ -286,8 +294,56 @@
 
         
       
-        <h3 id="word.ListWordRequest">ListWordRequest</h3>
+        <h3 id="word.GetWordRequest">GetWordRequest</h3>
+        <p>単語を取得する際のリクエスト</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="word.GetWordResponse">GetWordResponse</h3>
         <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>word</td>
+                  <td><a href="#word.Word">Word</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="word.ListWordRequest">ListWordRequest</h3>
+        <p>単語の一覧を取得する際のリクエスト</p>
 
         
           <table class="field-table">
@@ -436,6 +492,13 @@
                 <td><a href="#word.ListWordRequest">ListWordRequest</a></td>
                 <td><a href="#word.ListWordResponse">ListWordResponse</a></td>
                 <td><p>指定したユーザIDの単語一覧を表示する。</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetWord</td>
+                <td><a href="#word.GetWordRequest">GetWordRequest</a></td>
+                <td><a href="#word.GetWordResponse">GetWordResponse</a></td>
+                <td><p>指定したIDの単語を取得する。</p></td>
               </tr>
             
               <tr>
