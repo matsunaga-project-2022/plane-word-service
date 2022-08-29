@@ -25,10 +25,16 @@ update_module:
 ###############################
 
 ## 開発に必要なツール群のインストール
-install_tools: $(BIN_DIR)/goose $(BIN_DIR)/protoc-gen-go $(BIN_DIR)/make2help $(BIN_DIR)/table-to-go
+install_tools: $(BIN_DIR)/goose $(BIN_DIR)/protoc-gen-go $(BIN_DIR)/make2help $(BIN_DIR)/table-to-go $(BIN_DIR)/protoc-gen-doc $(BIN_DIR)/protoc-gen-go-grpc
 
 $(BIN_DIR)/protoc-gen-go: go.sum
 	@go build -o $@ google.golang.org/protobuf/cmd/protoc-gen-go
+
+$(BIN_DIR)/protoc-gen-go-grpc: go.sum
+	@go build -o $@ google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+$(BIN_DIR)/protoc-gen-doc: go.sum
+	@go build -o $@ github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 
 $(BIN_DIR)/goose: go.sum
 	@go build -o $@ github.com/pressly/goose/v3/cmd/goose
@@ -93,3 +99,20 @@ dao_gen:
 ## internal以下のテストを実行する。
 test:
 	go test ./internal/...
+
+grpc_gen:
+	protoc \
+		--plugin=protoc-gen-go=$(BIN_DIR)/protoc-gen-go \
+		--plugin=protoc-gen-go-grpc=$(BIN_DIR)/protoc-gen-go-grpc \
+		--go_out=. \
+		--go_opt=paths=source_relative \
+		--go-grpc_out=. \
+		--go-grpc_opt=paths=source_relative \
+		--go-grpc_opt require_unimplemented_servers=false \
+		./internal/proto/*.proto
+
+grpc_doc:
+	protoc \
+	--plugin=protoc-gen-doc=$(BIN_DIR)/protoc-gen-doc \
+	--doc_out=html,proto.html:./doc \
+	./internal/proto/*.proto

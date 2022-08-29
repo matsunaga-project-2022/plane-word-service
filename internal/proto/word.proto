@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package word;
+
+option go_package = "./proto";
+
+import "google/protobuf/empty.proto";
+
+/**
+ * 単語を管理するサービス
+ */
+service WordService {
+  //特定の文字列をユーザの単語帳として登録する。
+  rpc CreateWord(CreateWordRequest) returns (google.protobuf.Empty);
+  //指定したユーザIDの単語一覧を表示する。
+  rpc ListWord(ListWordRequest) returns (ListWordResponse);
+  //指定したIDの単語の説明文を変更する。
+  rpc UpdateWord(UpdateRequest) returns (google.protobuf.Empty);
+  //指定したIDの単語を削除する。
+  rpc DeleteWord(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+/**
+ * 単語の型
+ */
+message Word {
+  string id = 1;
+  string userID = 2;
+  string word = 3;
+  string meaning = 4;
+}
+
+/**
+ * 単語を作成する際のリクエスト
+ */
+message CreateWordRequest {
+  string userID = 1;
+  string word = 2;
+  string meaning = 3;
+}
+
+message ListWordRequest {
+  string userID = 1;
+}
+
+/**
+ * 指定したIDの単語を更新する際のリクエスト
+ */
+message UpdateRequest {
+  string id = 1;
+  string meaning = 2;
+}
+
+/**
+ * 指定したIDの単語を削除する際のリクエスト
+ */
+message DeleteRequest {
+  string id = 1;
+}
+
+/**
+ * 指定したユーザIDの単語一覧を返す
+ */
+message ListWordResponse {
+  repeated Word words = 1;
+}
