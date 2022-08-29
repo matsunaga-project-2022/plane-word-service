@@ -4,9 +4,9 @@ import "errors"
 
 // Word 単語を表すEntity
 type Word struct {
-	ID       string
-	WordName string
-	Meaning  string
+	ID       string `db:"id"`
+	WordName string `db:"word_name"`
+	Meaning  string `db:"meaning"`
 }
 
 type UserWords map[string][]*Word
