@@ -39,6 +39,27 @@ func (wr *WordRepositoryMysqlImp) ListWordByUserID(ctx context.Context, userID s
 	return words, nil
 }
 
+func (wr *WordRepositoryMysqlImp) GetByID(ctx context.Context, id string) (*entity.Word, error) {
+	word := &entity.Word{}
+	log.Println(id)
+	err := wr.db.GetContext(ctx, word, `
+		SELECT id, word_name, meaning FROM words
+		WHERE id = ?
+	`, id)
+
+	if err == sql.ErrNoRows {
+		log.Println("Data not found.")
+		return nil, nil
+	}
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return word, nil
+}
+
 func (wr *WordRepositoryMysqlImp) CreateWord(ctx context.Context, word *entity.Word, userID string) (err error) {
 	tx := wr.db.MustBeginTx(ctx, nil)
 	_, err = tx.ExecContext(ctx, `

@@ -27,6 +27,8 @@ type WordServiceClient interface {
 	CreateWord(ctx context.Context, in *CreateWordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 指定したユーザIDの単語一覧を表示する。
 	ListWord(ctx context.Context, in *ListWordRequest, opts ...grpc.CallOption) (*ListWordResponse, error)
+	// 指定したIDの単語を取得する。
+	GetWord(ctx context.Context, in *GetWordRequest, opts ...grpc.CallOption) (*GetWordResponse, error)
 	// 指定したIDの単語の説明文を変更する。
 	UpdateWord(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 指定したIDの単語を削除する。
@@ -59,6 +61,15 @@ func (c *wordServiceClient) ListWord(ctx context.Context, in *ListWordRequest, o
 	return out, nil
 }
 
+func (c *wordServiceClient) GetWord(ctx context.Context, in *GetWordRequest, opts ...grpc.CallOption) (*GetWordResponse, error) {
+	out := new(GetWordResponse)
+	err := c.cc.Invoke(ctx, "/word.WordService/GetWord", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *wordServiceClient) UpdateWord(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/word.WordService/UpdateWord", in, out, opts...)
@@ -85,6 +96,8 @@ type WordServiceServer interface {
 	CreateWord(context.Context, *CreateWordRequest) (*emptypb.Empty, error)
 	// 指定したユーザIDの単語一覧を表示する。
 	ListWord(context.Context, *ListWordRequest) (*ListWordResponse, error)
+	// 指定したIDの単語を取得する。
+	GetWord(context.Context, *GetWordRequest) (*GetWordResponse, error)
 	// 指定したIDの単語の説明文を変更する。
 	UpdateWord(context.Context, *UpdateRequest) (*emptypb.Empty, error)
 	// 指定したIDの単語を削除する。
@@ -100,6 +113,9 @@ func (UnimplementedWordServiceServer) CreateWord(context.Context, *CreateWordReq
 }
 func (UnimplementedWordServiceServer) ListWord(context.Context, *ListWordRequest) (*ListWordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListWord not implemented")
+}
+func (UnimplementedWordServiceServer) GetWord(context.Context, *GetWordRequest) (*GetWordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWord not implemented")
 }
 func (UnimplementedWordServiceServer) UpdateWord(context.Context, *UpdateRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateWord not implemented")
@@ -155,6 +171,24 @@ func _WordService_ListWord_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WordService_GetWord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WordServiceServer).GetWord(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/word.WordService/GetWord",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WordServiceServer).GetWord(ctx, req.(*GetWordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WordService_UpdateWord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateRequest)
 	if err := dec(in); err != nil {
@@ -205,6 +239,10 @@ var WordService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListWord",
 			Handler:    _WordService_ListWord_Handler,
+		},
+		{
+			MethodName: "GetWord",
+			Handler:    _WordService_GetWord_Handler,
 		},
 		{
 			MethodName: "UpdateWord",

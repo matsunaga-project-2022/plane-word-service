@@ -14,6 +14,8 @@ service WordService {
   rpc CreateWord(CreateWordRequest) returns (google.protobuf.Empty);
   //指定したユーザIDの単語一覧を表示する。
   rpc ListWord(ListWordRequest) returns (ListWordResponse);
+  //指定したIDの単語を取得する。
+  rpc GetWord(GetWordRequest) returns (GetWordResponse);
   //指定したIDの単語の説明文を変更する。
   rpc UpdateWord(UpdateRequest) returns (google.protobuf.Empty);
   //指定したIDの単語を削除する。
@@ -39,10 +41,19 @@ message CreateWordRequest {
   string meaning = 3;
 }
 
+/**
+ * 単語の一覧を取得する際のリクエスト
+ */
 message ListWordRequest {
   string userID = 1;
 }
 
+/**
+ * 単語を取得する際のリクエスト
+ */
+message GetWordRequest {
+  string id = 1;
+}
 /**
  * 指定したIDの単語を更新する際のリクエスト
  */
@@ -63,4 +74,8 @@ message DeleteRequest {
  */
 message ListWordResponse {
   repeated Word words = 1;
+}
+
+message GetWordResponse {
+  Word word = 1;
 }

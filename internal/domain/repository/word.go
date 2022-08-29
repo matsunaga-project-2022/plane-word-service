@@ -10,4 +10,5 @@ type Word interface {
 	UpdateWord(ctx context.Context, word *entity.Word) error
 	DeleteWord(ctx context.Context, id string) error
 	ListWordByUserID(ctx context.Context, userID string) ([]*entity.Word, error)
+	GetByID(ctx context.Context, id string) (*entity.Word, error)
 }
