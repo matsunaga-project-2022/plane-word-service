@@ -11,6 +11,10 @@ type WordController struct {
 	service *service.Word
 }
 
+func NewWordController(service *service.Word) *WordController {
+	return &WordController{service: service}
+}
+
 func (w *WordController) CreateWord(ctx context.Context, request *proto.CreateWordRequest) (*emptypb.Empty, error) {
 	err := w.service.CreateWord(ctx, request.GetWord(), request.GetMeaning(), request.GetUserID())
 	if err != nil {
@@ -18,6 +22,22 @@ func (w *WordController) CreateWord(ctx context.Context, request *proto.CreateWo
 	}
 
 	res := &emptypb.Empty{}
+	return res, nil
+}
+
+func (w *WordController) GetWord(ctx context.Context, request *proto.GetWordRequest) (*proto.GetWordResponse, error) {
+	word, err := w.service.GetWordByID(ctx, request.GetId())
+	if err != nil {
+		return nil, err
+	}
+	resWord := &proto.Word{
+		Id:      word.ID,
+		UserID:  request.GetUserID(),
+		Word:    word.WordName,
+		Meaning: word.Meaning,
+	}
+	res := &proto.GetWordResponse{Word: resWord}
+
 	return res, nil
 }
 
