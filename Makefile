@@ -114,5 +114,5 @@ grpc_gen:
 grpc_doc:
 	protoc \
 	--plugin=protoc-gen-doc=$(BIN_DIR)/protoc-gen-doc \
-	--doc_out=html,proto.html:./doc \
+	--doc_out=markdown,proto.md:./doc \
 	./internal/proto/*.proto

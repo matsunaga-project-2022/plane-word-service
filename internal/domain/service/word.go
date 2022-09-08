@@ -59,3 +59,11 @@ func (w Word) ListWordByUserID(ctx context.Context, userID string) ([]*entity.Wo
 	}
 	return word, nil
 }
+
+func (w Word) GetWordByID(ctx context.Context, id string) (*entity.Word, error) {
+	word, err := w.repository.GetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return word, nil
+}

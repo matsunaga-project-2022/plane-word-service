@@ -53,6 +53,7 @@ message ListWordRequest {
  */
 message GetWordRequest {
   string id = 1;
+  string userID = 2;
 }
 /**
  * 指定したIDの単語を更新する際のリクエスト
