@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/matsunaga-project-2022/shanks/internal/domain/service"
 	"github.com/matsunaga-project-2022/shanks/internal/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -28,8 +30,15 @@ func (w *WordController) CreateWord(ctx context.Context, request *proto.CreateWo
 func (w *WordController) GetWord(ctx context.Context, request *proto.GetWordRequest) (*proto.GetWordResponse, error) {
 	word, err := w.service.GetWordByID(ctx, request.GetId())
 	if err != nil {
+		err := status.Error(codes.Internal, "internal server error occurred")
 		return nil, err
 	}
+
+	if word == nil {
+		err := status.Error(codes.NotFound, "question not found")
+		return nil, err
+	}
+
 	resWord := &proto.Word{
 		Id:      word.ID,
 		UserID:  request.GetUserID(),
@@ -44,6 +53,12 @@ func (w *WordController) GetWord(ctx context.Context, request *proto.GetWordRequ
 func (w *WordController) ListWord(ctx context.Context, request *proto.ListWordRequest) (*proto.ListWordResponse, error) {
 	words, err := w.service.ListWordByUserID(ctx, request.GetUserID())
 	if err != nil {
+		err := status.Error(codes.Internal, "internal server error occurred")
+		return nil, err
+	}
+
+	if words == nil {
+		err := status.Error(codes.NotFound, "question not found")
 		return nil, err
 	}
 
